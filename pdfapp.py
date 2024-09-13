@@ -22,13 +22,8 @@ groq_api_key=os.getenv("GROQ_API_KEY")
 
 
 ## set up Streamlit 
-st.title("Welcome to the Pdf Chatbot?")
+st.title("Welcome to the Pdf Chatbot")
 st.write("Upload Pdf's and chat with their content")
-
-## Input the Groq API Key
-
-
-## Check if groq api key is provided
 
 llm=ChatGroq(groq_api_key=groq_api_key,model_name="Gemma2-9b-It")
 
@@ -76,8 +71,6 @@ if uploaded_files:
             )
         
     history_aware_retriever=create_history_aware_retriever(llm,retriever,contextualize_q_prompt)
-
-        ## Answer question
 
         # Answer question
     system_prompt = (
