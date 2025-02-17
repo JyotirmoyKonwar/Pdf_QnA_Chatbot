@@ -22,10 +22,10 @@ groq_api_key=os.getenv("GROQ_API_KEY")
 
 
 ## set up Streamlit 
-st.title("Welcome to the Pdf Chatbot")
+st.title("Welcome to the Pdf Q&A Chatbot")
 st.write("Upload Pdf's and chat with their content")
 
-llm=ChatGroq(groq_api_key=groq_api_key,model_name="Gemma2-9b-It")
+llm=ChatGroq(groq_api_key=groq_api_key,model_name="Deepseek-R1-Distil-Llama-70b")
 
     ## chat interface
 
@@ -75,10 +75,10 @@ if uploaded_files:
         # Answer question
     system_prompt = (
                 "You are an assistant for question-answering tasks. "
-                "Use the following pieces of retrieved context to answer "
+                "Use the following informantion you retrieved from the documents to answer "
                 "the question. If you don't know the answer, say that you "
-                "don't know. Use three sentences maximum and keep the "
-                "answer concise."
+                "don't know. Do not hallucinate information and keep the "
+                "answer concise. Give your answers based on the information provided in the documents"
                 "\n\n"
                 "{context}"
             )
