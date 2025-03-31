@@ -21,22 +21,20 @@ os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
 groq_api_key=os.getenv("GROQ_API_KEY")
 
 
-## set up Streamlit 
+##Streamlit 
 st.title("Welcome to the Pdf Q&A Chatbot")
 st.write("Upload Pdf's and chat with their content")
 
 llm=ChatGroq(groq_api_key=groq_api_key,model_name="Deepseek-R1-Distil-Llama-70b")
 
-    ## chat interface
-
 session_id=st.text_input("Session ID",value="default_session")
-    ## statefully manage chat history
+    ##chat history
 
 if 'store' not in st.session_state:
     st.session_state.store={}
 
 uploaded_files=st.file_uploader("Choose A PDf file",type="pdf",accept_multiple_files=True)
-    ## Process uploaded  PDF's
+    ##Upload PDF
 if uploaded_files:
     documents=[]
     for uploaded_file in uploaded_files:
@@ -49,7 +47,7 @@ if uploaded_files:
         docs=loader.load()
         documents.extend(docs)
 
-    # Split and create embeddings for the documents
+    #Embeddings
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=500)
     splits = text_splitter.split_documents(documents)
     vectorstore = Chroma.from_documents(documents=splits, embedding=embeddings)
@@ -72,14 +70,14 @@ if uploaded_files:
         
     history_aware_retriever=create_history_aware_retriever(llm,retriever,contextualize_q_prompt)
 
-        # Answer question
+        #QnA
     system_prompt = (
                 "You are an assistant for question-answering tasks. "
                 "Use the following informantion you retrieved from the documents to answer "
                 "the question. If you don't know the answer, say that you "
                 "don't know. Do not hallucinate information and keep the "
                 "answer concise. Give your answers based on the information provided in the documents"
-                "\n\n"
+                "\n"
                 "{context}"
             )
     qa_prompt = ChatPromptTemplate.from_messages(
@@ -112,7 +110,7 @@ if uploaded_files:
                 {"input": user_input},
                 config={
                     "configurable": {"session_id":session_id}
-                },  # constructs a key "abc123" in `store`.
+                },  
             )
         st.write(st.session_state.store)
         st.write("Assistant:", response['answer'])
